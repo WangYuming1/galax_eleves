@@ -14,43 +14,77 @@ void Model_CPU_naive
 	std::fill(accelerationsx.begin(), accelerationsx.end(), 0);
 	std::fill(accelerationsy.begin(), accelerationsy.end(), 0);
 	std::fill(accelerationsz.begin(), accelerationsz.end(), 0);
-
-	for (int i = 0; i < n_particles; i++)
+	#pragma omp parallel
 	{
-		for (int j = 0; j < n_particles; j++)
-		{
-			if(i != j)
+		#pragma omp for
+		
+
+			for (int i = 0; i < n_particles; i++)
 			{
-				const float diffx = particles.x[j] - particles.x[i];
-				const float diffy = particles.y[j] - particles.y[i];
-				const float diffz = particles.z[j] - particles.z[i];
-
-				float dij = diffx * diffx + diffy * diffy + diffz * diffz;
-
-				if (dij < 1.0)
+				for (int j = 0; j < n_particles; j++)
 				{
-					dij = 10.0;
-				}
-				else
-				{
-					dij = std::sqrt(dij);
-					dij = 10.0 / (dij * dij * dij);
-				}
+					if (i==j) 
+						continue;
+					
+					
+					const float diffx = particles.x[j] - particles.x[i];
+					const float diffy = particles.y[j] - particles.y[i];
+					const float diffz = particles.z[j] - particles.z[i];
 
-				accelerationsx[i] += diffx * dij * initstate.masses[j];
-				accelerationsy[i] += diffy * dij * initstate.masses[j];
-				accelerationsz[i] += diffz * dij * initstate.masses[j];
+					float dij = diffx * diffx + diffy * diffy + diffz * diffz;
+
+					if (dij < 1.0)
+					{
+						dij = 10.0;
+					}
+					else
+					{
+						dij = std::sqrt(dij);
+						dij = 10.0 / (dij * dij * dij);
+					}
+
+					accelerationsx[i] += diffx * dij * initstate.masses[j];
+					accelerationsy[i] += diffy * dij * initstate.masses[j];
+					accelerationsz[i] += diffz * dij * initstate.masses[j];
+				}
+			}	
+		
+	
+	
+		#pragma omp for
+			for (int i = 0; i < n_particles; i++)
+			{
+				velocitiesx[i] += accelerationsx[i] * 2.0f;
+				velocitiesy[i] += accelerationsy[i] * 2.0f;
+				velocitiesz[i] += accelerationsz[i] * 2.0f;
+				particles.x[i] += velocitiesx   [i] * 0.1f;
+				particles.y[i] += velocitiesy   [i] * 0.1f;
+				particles.z[i] += velocitiesz   [i] * 0.1f;
 			}
+	}	
+	
+//	#pragma omp parallel
+//	{
+//		#pragma omp for
+
+//		for (int i = 0; i < n_particles; i++)
+//		{
+		
+//		}
+//	}
+	
+	/*#pragma omp parallel
+	{
+		#pragma omp for	
+			for (int i = 0; i < n_particles; i++)
+		{
+	
+			particles.x[i] += accelerationsx[i] * 2.0f * 0.1f;
+			particles.y[i] += accelerationsy[i] * 2.0f * 0.1f;
+			particles.z[i] += accelerationsz[i] * 2.0f * 0.1f;
 		}
 	}
+	*/
 
-	for (int i = 0; i < n_particles; i++)
-	{
-		velocitiesx[i] += accelerationsx[i] * 2.0f;
-		velocitiesy[i] += accelerationsy[i] * 2.0f;
-		velocitiesz[i] += accelerationsz[i] * 2.0f;
-		particles.x[i] += velocitiesx   [i] * 0.1f;
-		particles.y[i] += velocitiesy   [i] * 0.1f;
-		particles.z[i] += velocitiesz   [i] * 0.1f;
-	}
+	
 }
