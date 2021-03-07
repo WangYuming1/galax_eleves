@@ -44,8 +44,8 @@ void Model_CPU_fast
                         }
                         else
                         {
-                            dij = std::sqrt(dij);
-                            dij = 10.0 / (dij * dij * dij);
+                            
+                            dij = 10.0 / (dij * std::sqrt(dij));
                         }
 
                         accelerationsx[i] += diffx * dij * initstate.masses[j];
