@@ -103,22 +103,18 @@ void Model_CPU_fast
             const mipp::Reg<float> rmass_j = &initstate.masses[j];
             mipp::Reg<float> dij;
             dij=diffx * diffx + diffy * diffy + diffz * diffz;
-            mipp::Msk<mipp::N<float>()> msk   = (dij<1.0);
-            //ZMM3 = mipp::mask<float, mipp::mul>(k1, ZMM1, ZMM1, ZMM2);
-            dij=mipp::mask<float,mipp::mul>(msk,dij,dij,rzero);
-            dij=mipp::mask<float,mipp::add>(msk,dij,dij,rone);
-            //Reg<T> min (const Reg<T> r1, const Reg<T> r2)
-               
-            dij =  rG/ (dij * mipp::sqrt(dij));
+        
+            dij=min(rG/(dij * mipp::sqrt(dij)),rG) ; 
+           // dij =  rG/ (dij * mipp::sqrt(dij));
                 
                 // r1.store(&myVector[(i+1)*mipp::N<float>()]);
 
                 raccx_i+=diffx*dij*rmass_j;
                 raccy_i+=diffy*dij*rmass_j;
                 raccz_i+=diffz*dij*rmass_j;
-                raccx_i.store(&accelerationsx[(j)*mipp::N<float>()]);
-                raccy_i.store(&accelerationsy[(j)*mipp::N<float>()]);
-                raccz_i.store(&accelerationsz[(j)*mipp::N<float>()]);
+                raccx_i.store(&accelerationsx[i]);
+                raccy_i.store(&accelerationsy[i]);
+                raccz_i.store(&accelerationsz[i]);
         }
 
 
