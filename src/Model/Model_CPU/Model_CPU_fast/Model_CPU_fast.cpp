@@ -20,7 +20,7 @@ void Model_CPU_fast
     std::fill(accelerationsy.begin(), accelerationsy.end(), 0);
     std::fill(accelerationsz.begin(), accelerationsz.end(), 0);
 
-
+/*
  #pragma omp parallel
  {
     #pragma omp for
@@ -67,23 +67,145 @@ void Model_CPU_fast
 				particles.z[i] += velocitiesz   [i] * 0.1f;
 			}
 }	
+
+
 	
+*/
+    const float zero=0;
+    const float one=1;
+    const float G=10;
+    const mipp::Reg<float> rG=&G;
+    const mipp::Reg<float> rzero=&zero;
+    const mipp::Reg<float> rone=&one;
+    for (int i = 0; i < n_particles; i += mipp::N<float>())
+    {
+            // load registers body i
+            const mipp::Reg<float> rposx_i = &particles.x[i];
+            const mipp::Reg<float> rposy_i = &particles.y[i];
+            const mipp::Reg<float> rposz_i = &particles.z[i];
+                mipp::Reg<float> raccx_i = &accelerationsx[i];
+                mipp::Reg<float> raccy_i = &accelerationsy[i];
+                mipp::Reg<float> raccz_i = &accelerationsz[i];
+                mipp::Reg<float> rvcx_i ;
+                mipp::Reg<float> rvcy_i ;
+                mipp::Reg<float> rvcz_i ;
+
+    
+        for (int j = 0; j < n_particles; j += mipp::N<float>()){
+            if (i==j) 
+                continue;
+            const mipp::Reg<float> rposx_j = &particles.x[j];
+            const mipp::Reg<float> rposy_j = &particles.y[j];
+            const mipp::Reg<float> rposz_j = &particles.z[j];
+            const mipp::Reg<float> diffx=rposx_j-rposx_i;
+            const mipp::Reg<float> diffy=rposx_j-rposx_i;
+            const mipp::Reg<float> diffz=rposx_j-rposx_i;   
+            const mipp::Reg<float> rmass_j = &initstate.masses[j];
+            mipp::Reg<float> dij;
+            dij=diffx * diffx + diffy * diffy + diffz * diffz;
+            mipp::Msk<mipp::N<float>()> msk   = (dij<1.0);
+            //ZMM3 = mipp::mask<float, mipp::mul>(k1, ZMM1, ZMM1, ZMM2);
+            dij=mipp::mask<float,mipp::mul>(msk,dij,dij,rzero);
+            dij=mipp::mask<float,mipp::add>(msk,dij,dij,rone);
+            //Reg<T> min (const Reg<T> r1, const Reg<T> r2)
+               
+            dij =  rG/ (dij * mipp::sqrt(dij));
+                
+                // r1.store(&myVector[(i+1)*mipp::N<float>()]);
+
+                raccx_i+=diffx*dij*rmass_j;
+                raccy_i+=diffy*dij*rmass_j;
+                raccz_i+=diffz*dij*rmass_j;
+                raccx_i.store(&accelerationsx[(j)*mipp::N<float>()]);
+                raccy_i.store(&accelerationsy[(j)*mipp::N<float>()]);
+                raccz_i.store(&accelerationsz[(j)*mipp::N<float>()]);
+        }
+
+
+  /*          rvcx_i += raccx_i * 2.0f;
+            rvcy_i += raccy_i * 2.0f;
+            rvcz_i += raccz_i * 2.0f;
+            rposx_i += rvcx_i * 0.1f;
+            rposy_i += rvcy_i * 0.1f;
+            rposz_i += rvcz_i  * 0.1f;
+            rposx_i.store(&accelerationsx[(i)*mipp::N<float>()]);
+            rposy_i.store(&accelerationsy[(i)*mipp::N<float>()]);
+            rposz_i.store(&accelerationsz[(i)*mipp::N<float>()]);
+*/
+        
+    }
+    for (int i = 0; i < n_particles; i++)
+			{
+				velocitiesx[i] += accelerationsx[i] * 2.0f;
+				velocitiesy[i] += accelerationsy[i] * 2.0f;
+				velocitiesz[i] += accelerationsz[i] * 2.0f;
+				particles.x[i] += velocitiesx   [i] * 0.1f;
+				particles.y[i] += velocitiesy   [i] * 0.1f;
+				particles.z[i] += velocitiesz   [i] * 0.1f;
+			}
+
+
+
 
 
 
 // OMP + MIPP version
-/* #pragma omp parallel for
-   for (int i = 0; i < n_particles; i += mipp::N<float>())
-    {
-         // load registers body i
-         const mipp::Reg<float> rposx_i = &particles.x[i];
-         const mipp::Reg<float> rposy_i = &particles.y[i];
-        const mipp::Reg<float> rposz_i = &particles.z[i];
-              mipp::Reg<float> raccx_i = &accelerationsx[i];
-               mipp::Reg<float> raccy_i = &accelerationsy[i];
-               mipp::Reg<float> raccz_i = &accelerationsz[i];
-     }
+ /*   #pragma omp parallel {
+    #pragma omp for
+        for (int i = 0; i < n_particles; i += mipp::N<float>())
+        {
+                // load registers body i
+                const mipp::Reg<float> rposx_i = &particles.x[i];
+                const mipp::Reg<float> rposy_i = &particles.y[i];
+                const mipp::Reg<float> rposz_i = &particles.z[i];
+                    mipp::Reg<float> raccx_i = &accelerationsx[i];
+                    mipp::Reg<float> raccy_i = &accelerationsy[i];
+                    mipp::Reg<float> raccz_i = &accelerationsz[i];
+                    mipp::Reg<float> rvcx_i 
+                    mipp::Reg<float> rvcy_i 
+                    mipp::Reg<float> rvcz_i 
 
-*/
+     
+            for (int j = 0; j < n_particles; j += mipp::N<float>()){
+                if (i==j) 
+                    continue;
+                const mipp::Reg<float> diffx=rposx_j-ropsx_i;
+                const mipp::Reg<float> diffy=rposx_j-ropsx_i;
+                const mipp::Reg<float> diffz=rposx_j-ropsx_i;   
+                const mipp::Reg<float> rmass_j = &initstate.masses[j];
+                mipp::Reg<float> dij=diffx * diffx + diffy * diffy + diffz * diffz;
+
+                if (dij < 1.0)
+                    {
+                        dij = 10.0;
+                    }
+                    else
+                    {
+                        
+                        dij = 10.0 / (dij * mipp::sqrt(dij));
+                    }
+                   // r1.store(&myVector[(i+1)*mipp::N<float>()]);
+
+                   raccx_i+=diffx*dij*rmass_j;
+                   raccy_i+=diffy*dij*rmass_j;
+                   raccz_i+=diffz*dij*rmass_j;
+
+            }
+
+            	rvcx_i += raccx_i * 2.0f;
+				rvcy_i += raccy_i * 2.0f;
+				rvcz_i += raccz_i * 2.0f;
+				rposx_i += rvcx_i * 0.1f;
+				rposy_i += rvcy_i * 0.1f;
+				rposz_i += rvcz_i  * 0.1f;
+            
+
+
+        }
+
+
+
+}*/
+
 }
 #endif // GALAX_MODEL_CPU_FAST
