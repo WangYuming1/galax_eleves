@@ -17,6 +17,7 @@ set(CMAKE_CXX_COMPILER_ID "GNU")
 set(CMAKE_TARGET_DEFINITIONS_CXX
   "GALAX_DISPLAY_SDL2"
   "GALAX_MODEL_CPU_FAST"
+  "GALAX_MODEL_GPU"
   "MIPP_ENABLE_BACKTRACE"
   )
 
@@ -31,6 +32,7 @@ set(CMAKE_CXX_TARGET_INCLUDE_PATH
 
 # Targets to which this target links.
 set(CMAKE_TARGET_LINKED_INFO_FILES
+  "/homes/y20wang/TEF_SEH/UEH/minipj/galax_eleves/build/CMakeFiles/galax_cuda.dir/DependInfo.cmake"
   "/homes/y20wang/TEF_SEH/UEH/minipj/galax_eleves/build/CMakeFiles/galax_display.dir/DependInfo.cmake"
   )
 

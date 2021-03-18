@@ -3,6 +3,7 @@
 /homes/y20wang/TEF_SEH/UEH/minipj/galax_eleves/build/CMakeFiles/rebuild_cache.dir
 /homes/y20wang/TEF_SEH/UEH/minipj/galax_eleves/build/CMakeFiles/package.dir
 /homes/y20wang/TEF_SEH/UEH/minipj/galax_eleves/build/CMakeFiles/galax.dir
+/homes/y20wang/TEF_SEH/UEH/minipj/galax_eleves/build/CMakeFiles/galax_cuda.dir
 /homes/y20wang/TEF_SEH/UEH/minipj/galax_eleves/build/CMakeFiles/galax_display.dir
 /homes/y20wang/TEF_SEH/UEH/minipj/galax_eleves/build/lib/cli/CMakeFiles/rebuild_cache.dir
 /homes/y20wang/TEF_SEH/UEH/minipj/galax_eleves/build/lib/cli/CMakeFiles/package_source.dir

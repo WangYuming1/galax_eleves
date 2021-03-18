@@ -3,6 +3,8 @@ cmake_policy(SET CMP0054 NEW)
 cmake_policy(SET CMP0072 NEW)
 project (galax)
 
+set(CUDA_TOOLKIT_ROOT_DIR "/usr/local/")
+
 if(GALAX_LINK_CUDA)
     enable_language(CUDA)
 endif(GALAX_LINK_CUDA)

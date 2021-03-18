@@ -154,6 +154,7 @@ bin/galax: CMakeFiles/galax.dir/src/Model/Model_CPU/Model_CPU_fast/Model_CPU_fas
 bin/galax: CMakeFiles/galax.dir/src/Initstate.cpp.o
 bin/galax: CMakeFiles/galax.dir/src/main.cpp.o
 bin/galax: CMakeFiles/galax.dir/build.make
+bin/galax: libgalax_cuda.so
 bin/galax: libgalax_display.so
 bin/galax: /usr/lib/x86_64-linux-gnu/libOpenGL.so
 bin/galax: /usr/lib/x86_64-linux-gnu/libGLX.so
@@ -162,6 +163,8 @@ bin/galax: /usr/lib/x86_64-linux-gnu/libglut.so
 bin/galax: /usr/lib/x86_64-linux-gnu/libXmu.so
 bin/galax: /usr/lib/x86_64-linux-gnu/libXi.so
 bin/galax: /usr/lib/x86_64-linux-gnu/libGLEW.so
+bin/galax: /usr/lib/x86_64-linux-gnu/libcudart_static.a
+bin/galax: /usr/lib/x86_64-linux-gnu/librt.so
 bin/galax: /usr/lib/gcc/x86_64-linux-gnu/9/libgomp.so
 bin/galax: /usr/lib/x86_64-linux-gnu/libpthread.so
 bin/galax: CMakeFiles/galax.dir/link.txt

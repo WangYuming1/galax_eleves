@@ -147,6 +147,19 @@ galax/fast:
 .PHONY : galax/fast
 
 #=============================================================================
+# Target rules for targets named galax_cuda
+
+# Build rule for target.
+galax_cuda: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 galax_cuda
+.PHONY : galax_cuda
+
+# fast build rule for target.
+galax_cuda/fast:
+	$(MAKE) -f CMakeFiles/galax_cuda.dir/build.make CMakeFiles/galax_cuda.dir/build
+.PHONY : galax_cuda/fast
+
+#=============================================================================
 # Target rules for targets named galax_display
 
 # Build rule for target.
@@ -739,6 +752,60 @@ src/Model/Model_CPU/Model_CPU_naive/Model_CPU_naive.cpp.s:
 	$(MAKE) -f CMakeFiles/galax.dir/build.make CMakeFiles/galax.dir/src/Model/Model_CPU/Model_CPU_naive/Model_CPU_naive.cpp.s
 .PHONY : src/Model/Model_CPU/Model_CPU_naive/Model_CPU_naive.cpp.s
 
+src/Model/Model_GPU/Model_GPU.o: src/Model/Model_GPU/Model_GPU.cpp.o
+
+.PHONY : src/Model/Model_GPU/Model_GPU.o
+
+# target to build an object file
+src/Model/Model_GPU/Model_GPU.cpp.o:
+	$(MAKE) -f CMakeFiles/galax_cuda.dir/build.make CMakeFiles/galax_cuda.dir/src/Model/Model_GPU/Model_GPU.cpp.o
+.PHONY : src/Model/Model_GPU/Model_GPU.cpp.o
+
+src/Model/Model_GPU/Model_GPU.i: src/Model/Model_GPU/Model_GPU.cpp.i
+
+.PHONY : src/Model/Model_GPU/Model_GPU.i
+
+# target to preprocess a source file
+src/Model/Model_GPU/Model_GPU.cpp.i:
+	$(MAKE) -f CMakeFiles/galax_cuda.dir/build.make CMakeFiles/galax_cuda.dir/src/Model/Model_GPU/Model_GPU.cpp.i
+.PHONY : src/Model/Model_GPU/Model_GPU.cpp.i
+
+src/Model/Model_GPU/Model_GPU.s: src/Model/Model_GPU/Model_GPU.cpp.s
+
+.PHONY : src/Model/Model_GPU/Model_GPU.s
+
+# target to generate assembly for a file
+src/Model/Model_GPU/Model_GPU.cpp.s:
+	$(MAKE) -f CMakeFiles/galax_cuda.dir/build.make CMakeFiles/galax_cuda.dir/src/Model/Model_GPU/Model_GPU.cpp.s
+.PHONY : src/Model/Model_GPU/Model_GPU.cpp.s
+
+src/Model/Model_GPU/kernel.o: src/Model/Model_GPU/kernel.cu.o
+
+.PHONY : src/Model/Model_GPU/kernel.o
+
+# target to build an object file
+src/Model/Model_GPU/kernel.cu.o:
+	$(MAKE) -f CMakeFiles/galax_cuda.dir/build.make CMakeFiles/galax_cuda.dir/src/Model/Model_GPU/kernel.cu.o
+.PHONY : src/Model/Model_GPU/kernel.cu.o
+
+src/Model/Model_GPU/kernel.i: src/Model/Model_GPU/kernel.cu.i
+
+.PHONY : src/Model/Model_GPU/kernel.i
+
+# target to preprocess a source file
+src/Model/Model_GPU/kernel.cu.i:
+	$(MAKE) -f CMakeFiles/galax_cuda.dir/build.make CMakeFiles/galax_cuda.dir/src/Model/Model_GPU/kernel.cu.i
+.PHONY : src/Model/Model_GPU/kernel.cu.i
+
+src/Model/Model_GPU/kernel.s: src/Model/Model_GPU/kernel.cu.s
+
+.PHONY : src/Model/Model_GPU/kernel.s
+
+# target to generate assembly for a file
+src/Model/Model_GPU/kernel.cu.s:
+	$(MAKE) -f CMakeFiles/galax_cuda.dir/build.make CMakeFiles/galax_cuda.dir/src/Model/Model_GPU/kernel.cu.s
+.PHONY : src/Model/Model_GPU/kernel.cu.s
+
 src/Particles.o: src/Particles.cpp.o
 
 .PHONY : src/Particles.o
@@ -804,6 +871,7 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... package"
 	@echo "... galax"
+	@echo "... galax_cuda"
 	@echo "... galax_display"
 	@echo "... NightlyMemCheck"
 	@echo "... NightlyTest"
@@ -857,6 +925,12 @@ help:
 	@echo "... src/Model/Model_CPU/Model_CPU_naive/Model_CPU_naive.o"
 	@echo "... src/Model/Model_CPU/Model_CPU_naive/Model_CPU_naive.i"
 	@echo "... src/Model/Model_CPU/Model_CPU_naive/Model_CPU_naive.s"
+	@echo "... src/Model/Model_GPU/Model_GPU.o"
+	@echo "... src/Model/Model_GPU/Model_GPU.i"
+	@echo "... src/Model/Model_GPU/Model_GPU.s"
+	@echo "... src/Model/Model_GPU/kernel.o"
+	@echo "... src/Model/Model_GPU/kernel.i"
+	@echo "... src/Model/Model_GPU/kernel.s"
 	@echo "... src/Particles.o"
 	@echo "... src/Particles.i"
 	@echo "... src/Particles.s"
